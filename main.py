@@ -1,5 +1,5 @@
 from client import Bot
 
-print("Bot Started 👍")
+print("Bot Started 👍Contact @unicornguardian")
 Bot().run()
 
