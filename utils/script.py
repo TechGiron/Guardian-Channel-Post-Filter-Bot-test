@@ -20,7 +20,7 @@ Get connected channels list with - /connections"""
     ABOUT = """Contact To @unicornguardian
 
 ✯ Mʏ Nᴀᴍᴇ:  {}
-✯ Cʀᴇᴀᴛᴏʀ: <a href='tg://user?id=5503019033'>Unicorn</a>
+✯ 𝖢𝗈𝗇𝗍𝖺𝖼𝗍: <a href='tg://user?id=5503019033'>Unicorn</a>
 ✯ Lᴀɴɢᴜᴀɢᴇ: <a href='https://www.python.org'>Pʏᴛʜᴏɴ 3</a>
 ✯ DᴀᴛᴀBᴀsᴇ: <a href='https://cloud.mongodb.com/'>MᴏɴɢᴏDB</a>
 ✯ Bᴏᴛ Sᴇʀᴠᴇʀ: : <a href='https://heroku.com'>Heroku</a>"""
