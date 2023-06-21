@@ -28,7 +28,7 @@ async def search(bot, message):
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
                name = (msg.text or msg.caption).split("\n")[0]
-                similarity_ratio = fuzz.token_set_ratio(query, name.lower())
+                similarity_ratio=fuzz.token_set_ratio(query, name.lower())
                if similarity_ratio < 50:
                    continue  
                if name in results:
