@@ -11,14 +11,11 @@ async def search(bot, message):
     f_sub = await force_sub(bot, message)
     if f_sub==False:
        return
-
     channels = (await get_group(message.chat.id))["channels"]
     if bool(channels)==False:
        return
-
     if message.text.startswith("/"):
         return
-
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
     filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download"]]
@@ -27,14 +24,14 @@ async def search(bot, message):
     head = "<u>Here are the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
     try:
-        for channel in channels:
-            async for msg in User.search_messages(chat_id=channel, query=query):
-                name = (msg.text or msg.caption).split("\n")[0]
-                if name in results:
-                    continue
-                results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"
+       for channel in channels:
+           async for msg in User.search_messages(chat_id=channel, query=query):
+               name = (msg.text or msg.caption).split("\n")[0]
+               if name in results:
+                  continue 
+               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"
        if bool(results)==False:
-            movies = await search_imdb(query)
+           movies = await search_imdb(query)
           buttons = []
           for movie in movies: 
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
