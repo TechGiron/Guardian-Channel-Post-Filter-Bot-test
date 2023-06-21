@@ -20,27 +20,30 @@ async def search(bot, message):
        return    
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
-    matching_movies = []
-    
-    # Fuzzy string matching for each word in the query
-    for word in query_words:
-        for channel in channels:
-            async for msg in User.search_messages(chat_id=channel, query=word):
-                name = (msg.text or msg.caption).split("\n")[0]
-                match_ratio = fuzz.token_set_ratio(word, name.lower())
-                if match_ratio >= 80:  # Adjust the match ratio threshold as per your preference
-                    matching_movies.append((name, msg.link))
-    
-    if not matching_movies:
-        msg = await message.reply_text(text="<b><i>No matching movies found.</i></b>")
-    else:
-        results = "\n\n".join([f"<b><i>♻️ {name}\n🔗 {link}</i></b>" for name, link in matching_movies])
-        head = "<u>Here are the results:</u>\n\nContact <b><i>@Botz_Guardian_Update</i></b> for more details.\n\n"
-        msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
-     _time = (int(time()) + (15*60))
-     await save_dlt_message(msg, _time)
-   except:
-      pass
+    filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
+    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
+    results = ""
+    try:
+       for channel in channels:
+           async for msg in User.search_messages(chat_id=channel, query=query):
+               name = (msg.text or msg.caption).split("\n")[0]
+               if name in results:
+                  continue 
+               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
+       if bool(results)==False:
+          movies = await search_imdb(query)
+          buttons = []
+          for movie in movies: 
+              buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
+          msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+                                          reply_markup=InlineKeyboardMarkup(buttons))
+       else:
+          msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
+       _time = (int(time()) + (15*60))
+       await save_dlt_message(msg, _time)
+    except:
+       pass
        
 
 
