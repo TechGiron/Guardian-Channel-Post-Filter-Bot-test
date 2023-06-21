@@ -10,10 +10,10 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 async def search(bot, message):
     f_sub = await force_sub(bot, message)
     if f_sub==False:
-       return
+       return     
     channels = (await get_group(message.chat.id))["channels"]
     if bool(channels)==False:
-       return
+       return     
     if message.text.startswith("/"):
         return
     query = message.text.lower()  # Convert the query to lowercase
@@ -31,7 +31,7 @@ async def search(bot, message):
                   continue 
                results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"
        if bool(results)==False:
-           movies = await search_imdb(query)
+          movies = await search_imdb(query)
           buttons = []
           for movie in movies: 
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
