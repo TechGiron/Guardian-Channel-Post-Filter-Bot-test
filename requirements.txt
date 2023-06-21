@@ -5,4 +5,4 @@ cinemagoer
 aiohttp
 aiofiles
 asyncio
-fuzzywuzzy
+thefuzz
