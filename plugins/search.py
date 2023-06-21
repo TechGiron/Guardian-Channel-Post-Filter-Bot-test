@@ -19,7 +19,7 @@ async def search(bot, message):
        return    
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
-    filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
+    filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
