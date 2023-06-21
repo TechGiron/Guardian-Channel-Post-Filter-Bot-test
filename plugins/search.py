@@ -15,13 +15,9 @@ async def search(bot, message):
     if bool(channels)==False:
        return     
     if message.text.startswith("/"):
-        return
-    query = message.text.lower()  # Convert the query to lowercase
-    query_words = query.split()  # Split the query into individual words
-    filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download"]]
-    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
-
-    head = "<u>Here are the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
+       return    
+    query   = message.text 
+    head    = "<u>Here is the results 👇\n\nPowered By </u> <b><I>@CyniteBackup</I></b>\n\n"
     results = ""
     try:
        for channel in channels:
@@ -29,7 +25,7 @@ async def search(bot, message):
                name = (msg.text or msg.caption).split("\n")[0]
                if name in results:
                   continue 
-               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"
+               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
@@ -55,13 +51,13 @@ async def recheck(bot, update):
     except:
        return await update.message.delete(2)       
     if clicked != typed:
-       return await update.answer("That's not for you! 👀", show_alert=False)
+       return await update.answer("That's not for you! 👀", show_alert=True)
 
     m=await update.message.edit("Searching..💥")
     id      = update.data.split("_")[-1]
     query   = await search_imdb(id)
     channels = (await get_group(update.message.chat.id))["channels"]
-    head    = "<u>I Have Searched Movie With Wrong Spelling But Take care next time 👇\n\nPowered By </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
+    head    = "<u>I Have Searched Movie With Wrong Spelling But Take care next time 👇\n\nPowered By </u> <b><I>@CyniteBackup</I></b>\n\n"
     results = ""
     try:
        for channel in channels:
