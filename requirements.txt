@@ -6,5 +6,4 @@ aiohttp
 aiofiles
 asyncio
 thefuzz
-difflib
 python-Levenshtein
