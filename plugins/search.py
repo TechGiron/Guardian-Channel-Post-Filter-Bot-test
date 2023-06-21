@@ -10,11 +10,11 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 async def search(bot, message):
     f_sub = await force_sub(bot, message)
     if f_sub==False:
-        return
+       return
 
     channels = (await get_group(message.chat.id))["channels"]
     if bool(channels)==False:
-        return
+       return
 
     if message.text.startswith("/"):
         return
@@ -26,7 +26,6 @@ async def search(bot, message):
 
     head = "<u>Here are the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
-
     try:
         for channel in channels:
             async for msg in User.search_messages(chat_id=channel, query=query):
@@ -34,24 +33,20 @@ async def search(bot, message):
                 if name in results:
                     continue
                 results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"
-
-        if not results:
+       if bool(results)==False:
             movies = await search_imdb(query)
-            buttons = [
-                [InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")]
-                for movie in movies
-            ]
-            msg = await message.reply_text(
-                text="<b><I>I couldn't find anything related to your query 😕. Did you mean any of these?</I></b>",
-                reply_markup=InlineKeyboardMarkup(buttons)
-            )
-        else:
-            msg = await message.reply_text(text=head + results, disable_web_page_preview=True)
-
-        _time = int(time()) + (15 * 60)
-        await save_dlt_message(msg, _time)
+          buttons = []
+          for movie in movies: 
+              buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
+          msg = await message.reply_photo(photo="https://telegra.ph/file/cf6706158b0bfaf436f54.jpg",
+                                          caption="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+                                          reply_markup=InlineKeyboardMarkup(buttons))
+       else:
+          msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
+       _time = (int(time()) + (15*60))
+       await save_dlt_message(msg, _time)
     except:
-        pass
+       pass
        
 
 
