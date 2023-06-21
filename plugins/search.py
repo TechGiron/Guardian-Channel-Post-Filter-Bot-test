@@ -58,8 +58,8 @@ async def search(bot, message):
     
     _time = int(time()) + (15 * 60)
     await save_dlt_message(msg, _time)
-    except:
-       pass
+ except:
+    pass
        
 
 
