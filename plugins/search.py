@@ -6,6 +6,7 @@ from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
 from thefuzz import fuzz 
+from thefuzz import token_set_ratio 
 import re
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
@@ -28,7 +29,7 @@ async def search(bot, message):
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
                name = (msg.text or msg.caption).split("\n")[0]
-                similarity_ratio=fuzz.token_set_ratio(query, name.lower())
+                similarity_ratio = fuzz.token_set_ratio(query, name.lower())
                if similarity_ratio < 50:
                    continue  
                if name in results:
