@@ -9,12 +9,12 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
     f_sub = await force_sub(bot, message)
-    if f_sub==False:
-       return
+    if f_sub == False:
+        return
 
     channels = (await get_group(message.chat.id))["channels"]
-    if bool(channels)==False:
-       return
+    if bool(channels) == False:
+        return
 
     if message.text.startswith("/"):
         return
@@ -26,6 +26,7 @@ async def search(bot, message):
 
     head = "<u>Here are the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
+
     try:
         for channel in channels:
             async for msg in User.search_messages(chat_id=channel, query=query):
@@ -50,7 +51,7 @@ async def search(bot, message):
         _time = int(time()) + (15 * 60)
         await save_dlt_message(msg, _time)
     except:
-       pass
+        pass
        
 
 
