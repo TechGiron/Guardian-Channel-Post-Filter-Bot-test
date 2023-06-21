@@ -47,7 +47,7 @@ async def search(bot, message):
     if not matching_movies:
         movies = await search_imdb(query)
         buttons = []
-          for movie in movies: 
+        for movie in movies: 
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
           msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
