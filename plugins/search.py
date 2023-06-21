@@ -9,11 +9,11 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
     f_sub = await force_sub(bot, message)
-    if f_sub == False:
+    if f_sub is False:
         return
 
     channels = (await get_group(message.chat.id))["channels"]
-    if bool(channels) == False:
+    if bool(channels) is False:
         return
 
     if message.text.startswith("/"):
@@ -22,21 +22,21 @@ async def search(bot, message):
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
     filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download"]]
-    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    filtered_query = " ".join(filtered_query_words)  # Reconstruct the filtered query
 
     head = "<u>Here are the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
 
     try:
         for channel in channels:
-            async for msg in User.search_messages(chat_id=channel, query=query):
+            async for msg in User.search_messages(chat_id=channel, query=filtered_query):
                 name = (msg.text or msg.caption).split("\n")[0]
                 if name in results:
                     continue
                 results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"
 
         if not results:
-            movies = await search_imdb(query)
+            movies = await search_imdb(filtered_query)
             buttons = [
                 [InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")]
                 for movie in movies
