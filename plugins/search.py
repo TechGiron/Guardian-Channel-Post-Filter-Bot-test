@@ -49,12 +49,15 @@ async def search(bot, message):
         buttons = []
         for movie in movies: 
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
-          msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+         msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
-       else:
-          msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
-       _time = (int(time()) + (15*60))
-       await save_dlt_message(msg, _time)
+    else:
+        results = "\n\n".join([f"<b><i>♻️ {name}\n🔗 {link}</i></b>" for name, link in matching_movies])
+        head = "<u>Here are the results:</u>\n\nContact <b><i>@Botz_Guardian_Update</i></b> for more details.\n\n"
+        msg = await message.reply_text(text=head + results, disable_web_page_preview=True)
+    
+    _time = int(time()) + (15 * 60)
+    await save_dlt_message(msg, _time)
     except:
        pass
        
