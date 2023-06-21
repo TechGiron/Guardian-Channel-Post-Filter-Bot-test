@@ -29,6 +29,8 @@ async def search(bot, message):
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
                name = (msg.text or msg.caption).split("\n")[0]
+               if process.extractOne(query, name, scorer=fuzz.ratio)[1] < 70:
+                   continue
                if name in results:
                   continue 
                results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
