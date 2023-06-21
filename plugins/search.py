@@ -5,6 +5,7 @@ from time import time
 from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
+import re
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
@@ -18,7 +19,7 @@ async def search(bot, message):
        return    
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
-    filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]]
+    filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
