@@ -16,10 +16,7 @@ async def search(bot, message):
        return     
     if message.text.startswith("/"):
        return    
-    query = message.text.lower()  # Convert the query to lowercase
-    query_words = query.split()  # Split the query into individual words
-    filtered_query_words = [word for word in query_words if word not in ["dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]]
-    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    query   = message.text 
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
     try:
