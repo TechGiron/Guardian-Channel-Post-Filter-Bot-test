@@ -5,7 +5,8 @@ from time import time
 from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
-from thefuzz import fuzz, process
+from thefuzz import fuzz
+from thefuzz import process
 import re
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
