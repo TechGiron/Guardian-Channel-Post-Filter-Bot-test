@@ -26,7 +26,7 @@ async def search(bot, message):
         async for msg in User.search_messages(chat_id=channel, query=query):
             name = (msg.text or msg.caption).split("\n")[0]
             match_ratio = fuzz.token_set_ratio(query, name.lower())
-            if match_ratio >= 80:  # Adjust the match ratio threshold as per your preference
+            if match_ratio >= 30:  # Adjust the match ratio threshold as per your preference
                 matching_movies.append((name, msg.link))
     
     # Token-based matching for accurate word matching
@@ -40,7 +40,7 @@ async def search(bot, message):
                 name_tokens = name.lower().split()  # Tokenize the name
                 query_tokens = query.split()  # Tokenize the query
                 match_ratio = fuzz.token_set_ratio(query_tokens, name_tokens)
-                if match_ratio < 60:  # Adjust the match ratio threshold as per your preference
+                if match_ratio < 30:  # Adjust the match ratio threshold as per your preference
                     continue
                 matching_movies.append((name, msg.link))
     
