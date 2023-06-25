@@ -5,6 +5,8 @@ from time import time
 from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
+from difflib import SequenceMatcher
+from urllib.parse import urlparse
 import re
 import itertools
 
