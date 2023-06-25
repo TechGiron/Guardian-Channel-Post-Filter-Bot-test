@@ -10,7 +10,9 @@ import itertools
 from difflib import SequenceMatcher
 
 def similarity_score(query, name):
-    return SequenceMatcher(None, query, name).ratio()
+    # Extract the movie name without additional details
+    name_without_details = re.sub(r'\(.*?\)', '', name).strip()
+    return SequenceMatcher(None, query, name_without_details).ratio()
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
@@ -41,6 +43,8 @@ async def search(bot, message):
             for word in flattened_combinations:
                 async for msg in User.search_messages(chat_id=channel, query=word):
                     name = (msg.text or msg.caption).split("\n")[0]
+                    if name in results:
+                        continue
                     similarity = similarity_score(query, name.lower())
                     results.append((name, msg.link, similarity))
         # Sort the results based on similarity score in descending order
