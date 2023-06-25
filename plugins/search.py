@@ -43,8 +43,6 @@ async def search(bot, message):
             for word in flattened_combinations:
                 async for msg in User.search_messages(chat_id=channel, query=word):
                     name = (msg.text or msg.caption).split("\n")[0]
-                    if name in results:
-                        continue
                     similarity = similarity_score(query, name.lower())
                     results.append((name, msg.link, similarity))
         # Sort the results based on similarity score in descending order
