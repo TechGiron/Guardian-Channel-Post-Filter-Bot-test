@@ -25,6 +25,7 @@ async def search(bot, message):
     results = ""
     try:
        for channel in channels:
+           for word in filtered_query_words:
            async for msg in User.search_messages(chat_id=channel, query=query):
                name = (msg.text or msg.caption).split("\n")[0]
                if name in results:
