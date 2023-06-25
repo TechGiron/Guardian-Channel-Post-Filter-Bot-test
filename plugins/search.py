@@ -26,11 +26,11 @@ async def search(bot, message):
     try:
        for channel in channels:
            for word in filtered_query_words:
-           async for msg in User.search_messages(chat_id=channel, query=query):
-               name = (msg.text or msg.caption).split("\n")[0]
-               if name in results:
-                  continue 
-               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
+               async for msg in User.search_messages(chat_id=channel, query=query):
+                   name = (msg.text or msg.caption).split("\n")[0]
+                   if name in results:
+                       continue 
+                   results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
