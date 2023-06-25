@@ -43,26 +43,28 @@ async def search(bot, message):
             for word in flattened_combinations:
                 async for msg in User.search_messages(chat_id=channel, query=word):
                     name = (msg.text or msg.caption).split("\n")[0]
-                    similarity = similarity_score(query, name.lower())
-                    results.append((name, msg.link, similarity))
-        # Sort the results based on similarity score in descending order
-        results = sorted(results, key=lambda x: x[2], reverse=True)
-        if len(results) == 0:
-            movies = await search_imdb(query)
-            buttons = []
-            for movie in movies: 
-                buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
-            msg = await message.reply_text(text="<b><i>I couldn't find anything related to your query 😕.\nDid you mean any of these?</i></b>", 
-                                            reply_markup=InlineKeyboardMarkup(buttons))
+                    if name in results:
+                        continue
+                    # Calculate similarity score
+                    score = similarity_score(filtered_query_words, name)
+                    # Insert the result at the appropriate position based on similarity score
+                    index = 0
+                    while index < len(results) and similarity_score(filtered_query_words, results[index]) > score:
+                        index += 1
+                    # Add the formatted result to the results string
+                    results = results[:index] + f"<b><i>♻️ {name}\n🔗 {msg.link}</i></b>\n\n" + results[index:]
+        if bool(results)==False:
+           movies = await search_imdb(query)
+           buttons = []
+           for movie in movies: 
+               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
+           msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+                                           reply_markup=InlineKeyboardMarkup(buttons))
         else:
-            results_text = ""
-            for result in results:
-                name, link, similarity = result
-                results_text += f"<b><i>♻️ {name}\n🔗 {link}</i></b>\n\n"
-            msg = await message.reply_text(text=head+results_text, disable_web_page_preview=True)
-        _time = int(time()) + (15*60)
+           msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
+        _time = (int(time()) + (15*60))
         await save_dlt_message(msg, _time)
-    except:
+     except:
         pass
 
 
