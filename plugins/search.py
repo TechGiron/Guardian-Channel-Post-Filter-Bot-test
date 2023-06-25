@@ -5,119 +5,93 @@ from time import time
 from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
+from thefuzz import fuzz 
 import re
-import itertools
-from difflib import SequenceMatcher
-
-def similarity_score(query, name):
-    # Extract the movie name without additional details
-    name_without_details = re.sub(r'\(.*?\)', '', name).strip()
-    return SequenceMatcher(None, query, name_without_details).ratio()
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
     f_sub = await force_sub(bot, message)
-    if f_sub == False:
-        return     
+    if f_sub==False:
+       return     
     channels = (await get_group(message.chat.id))["channels"]
-    if bool(channels) == False:
-        return     
+    if bool(channels)==False:
+       return     
     if message.text.startswith("/"):
-        return    
+       return    
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
-    filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam"] and not re.match(r'^\d+$', word)]
-    combinations = []
-    # Generate combinations of filtered query words
-    for r in range(1, len(filtered_query_words) + 1):
-        combinations += list(itertools.combinations(filtered_query_words, r)) 
-    # Add individual filtered query words to combinations
-    combinations += [[word] for word in filtered_query_words]  
-    # Flatten the combinations list and remove duplicates
-    flattened_combinations = list(set([combo for sublist in combinations for combo in sublist]))
-    query = " ".join(flattened_combinations)  # Update the query to contain the flattened combinations
-    head = "<u>Here are the results 👇\n\nContact To </u> <b><i>@Botz_Guardian_Update</i></b>\n\n"
-    results = []
+    filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
+    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
+    results = ""
     try:
-        for channel in channels:
-            for word in flattened_combinations:
-                async for msg in User.search_messages(chat_id=channel, query=word):
-                    name = (msg.text or msg.caption).split("\n")[0]
-                    if name in results:
-                        continue
-                    # Calculate similarity score
-                    score = similarity_score(filtered_query_words, name)
-                    # Insert the result at the appropriate position based on similarity score
-                    index = 0
-                    while index < len(results) and similarity_score(filtered_query_words, results[index]) > score:
-                        index += 1
-                    # Add the formatted result to the results string
-                    results = results[:index] + f"<b><i>♻️ {name}\n🔗 {msg.link}</i></b>\n\n" + results[index:]
-        if bool(results)==False:
-           movies = await search_imdb(query)
-           buttons = []
-           for movie in movies: 
-               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
-           msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
-                                           reply_markup=InlineKeyboardMarkup(buttons))
-        else:
-           msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
-        _time = (int(time()) + (15*60))
-        await save_dlt_message(msg, _time)
+       for channel in channels:
+           async for msg in User.search_messages(chat_id=channel, query=query):
+               name = (msg.text or msg.caption).split("\n")[0]
+               if name in results:
+                  continue 
+               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
+       if bool(results)==False:
+          movies = await search_imdb(query)
+          buttons = []
+          for movie in movies: 
+              buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
+          msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+                                          reply_markup=InlineKeyboardMarkup(buttons))
+       else:
+          msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
+       _time = (int(time()) + (15*60))
+       await save_dlt_message(msg, _time)
     except:
        pass
+       
 
 
 @Client.on_callback_query(filters.regex(r"^recheck"))
 async def recheck(bot, update):
     clicked = update.from_user.id
     try:      
-        typed = update.message.reply_to_message.from_user.id
+       typed = update.message.reply_to_message.from_user.id
     except:
-        return await update.message.delete(2)       
+       return await update.message.delete(2)       
     if clicked != typed:
-        return await update.answer("That's not for you! 👀", show_alert=True)
+       return await update.answer("That's not for you! 👀", show_alert=True)
 
-    m = await update.message.edit("Searching..💥")
-    id = update.data.split("_")[-1]
-    query = await search_imdb(id)
+    m=await update.message.edit("Searching..💥")
+    id      = update.data.split("_")[-1]
+    query   = await search_imdb(id)
     channels = (await get_group(update.message.chat.id))["channels"]
-    head = "<u>I have searched for a movie with a wrong spelling, but take care next time 👇\n\nPowered By </u> <b><i>@Botz_Guardian_Update</i></b>\n\n"
-    results = []
+    head    = "<u>I Have Searched Movie With Wrong Spelling But Take care next time 👇\n\nPowered By </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
+    results = ""
     try:
-        for channel in channels:
-            async for msg in User.search_messages(chat_id=channel, query=query):
-                name = (msg.text or msg.caption).split("\n")[0]
-                similarity = similarity_score(query, name.lower())
-                results.append((name, msg.link, similarity))
-        # Sort the results based on similarity score in descending order
-        results = sorted(results, key=lambda x: x[2], reverse=True)
-        if len(results) == 0:
-            return await update.message.edit("Still no results found! Please request to group admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
-        results_text = ""
-        for result in results:
-            name, link, similarity = result
-            results_text += f"<b><i>♻️🍿 {name}</i></b>\n\n🔗 {link}\n\n"
-        await update.message.edit(text=head+results_text, disable_web_page_preview=True)
+       for channel in channels:
+           async for msg in User.search_messages(chat_id=channel, query=query):
+               name = (msg.text or msg.caption).split("\n")[0]
+               if name in results:
+                  continue 
+               results += f"<b><I>♻️🍿 {name}</I></b>\n\n🔗 {msg.link}</I></b>\n\n"
+       if bool(results)==False:          
+          return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
+       await update.message.edit(text=head+results, disable_web_page_preview=True)
     except Exception as e:
-        await update.message.edit(f"❌ Error: `{e}`")
+       await update.message.edit(f"❌ Error: `{e}`")
 
 
 @Client.on_callback_query(filters.regex(r"^request"))
 async def request(bot, update):
     clicked = update.from_user.id
     try:      
-        typed = update.message.reply_to_message.from_user.id
+       typed = update.message.reply_to_message.from_user.id
     except:
-        return await update.message.delete()       
+       return await update.message.delete()       
     if clicked != typed:
-        return await update.answer("That's not for you! 👀", show_alert=True)
+       return await update.answer("That's not for you! 👀", show_alert=True)
 
     admin = (await get_group(update.message.chat.id))["user_id"]
-    id = update.data.split("_")[1]
-    name = await search_imdb(id)
-    url = "https://www.imdb.com/title/tt" + id
-    text = f"#RequestFromYourGroup\n\nName: {name}\nIMDb: {url}"
+    id    = update.data.split("_")[1]
+    name  = await search_imdb(id)
+    url   = "https://www.imdb.com/title/tt"+id
+    text  = f"#RequestFromYourGroup\n\nName: {name}\nIMDb: {url}"
     await bot.send_message(chat_id=admin, text=text, disable_web_page_preview=True)
     await update.answer("✅ Request Sent To Admin", show_alert=True)
     await update.message.delete(60)
