@@ -6,4 +6,3 @@ aiohttp
 aiofiles
 asyncio
 difflib
-urllib3
