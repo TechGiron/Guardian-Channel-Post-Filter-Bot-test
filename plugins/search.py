@@ -6,6 +6,7 @@ from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
 import re
+import itertools
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
@@ -20,12 +21,19 @@ async def search(bot, message):
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
-    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    combinations = []
+    # Generate combinations of filtered query words
+    for r in range(1, len(filtered_query_words) + 1):
+        combinations += list(itertools.combinations(filtered_query_words, r)) 
+    # Add individual filtered query words to combinations
+    combinations += [[word] for word in filtered_query_words]
+    # Flatten the combinations list and remove duplicates
+    flattened_combinations = list(set([combo for sublist in combinations for combo in sublist]))
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
     try:
        for channel in channels:
-           for word in filtered_query_words:
+           for word in flattened_combinations:
                async for msg in User.search_messages(chat_id=channel, query=query):
                    name = (msg.text or msg.caption).split("\n")[0]
                    if name in results:
