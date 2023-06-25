@@ -5,8 +5,8 @@ from time import time
 from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
+from thefuzz import fuzz 
 import re
-import itertools
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
@@ -21,24 +21,16 @@ async def search(bot, message):
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "Kannada", "Telugu", "Malayalam"]and not re.match(r'^\d+$', word)]
-    combinations = []
-    # Generate combinations of filtered query words
-    for r in range(1, len(filtered_query_words) + 1):
-        combinations += list(itertools.combinations(filtered_query_words, r)) 
-    # Add individual filtered query words to combinations
-    combinations += [[word] for word in filtered_query_words]
-    # Flatten the combinations list and remove duplicates
-    flattened_combinations = list(set([combo for sublist in combinations for combo in sublist]))
+    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
     try:
        for channel in channels:
-           for word in flattened_combinations:
-               async for msg in User.search_messages(chat_id=channel, query=query):
-                   name = (msg.text or msg.caption).split("\n")[0]
-                   if name in results:
-                       continue 
-                   results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
+           async for msg in User.search_messages(chat_id=channel, query=query):
+               name = (msg.text or msg.caption).split("\n")[0]
+               if name in results:
+                  continue 
+               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
@@ -50,8 +42,8 @@ async def search(bot, message):
           msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
        _time = (int(time()) + (15*60))
        await save_dlt_message(msg, _time)
-    except Exception as e:
-       print(f"An error occurred during the search: {str(e)}")
+    except:
+       pass
        
 
 
@@ -65,7 +57,7 @@ async def recheck(bot, update):
     if clicked != typed:
        return await update.answer("That's not for you! 👀", show_alert=True)
 
-    m=await update.message.edit("Searching...💥")
+    m=await update.message.edit("Searching..💥")
     id      = update.data.split("_")[-1]
     query   = await search_imdb(id)
     channels = (await get_group(update.message.chat.id))["channels"]
