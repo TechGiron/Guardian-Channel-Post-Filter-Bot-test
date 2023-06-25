@@ -6,6 +6,7 @@ from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
 import re
+import itertools
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
@@ -32,13 +33,13 @@ async def search(bot, message):
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
     try:
-        for channel in channels:
-            for word in flattened_combinations:
-                async for msg in User.search_messages(chat_id=channel, query=word):
-                    name = (msg.text or msg.caption).split("\n")[0]
-                    if name in results:
-                        continue
-                    results += f"<b><i>♻️ {name}\n🔗 {msg.link}</i></b>\n\n"                                         
+       for channel in channels:
+           for word in flattened_combinations:
+               async for msg in User.search_messages(chat_id=channel, query=word):
+                   name = (msg.text or msg.caption).split("\n")[0]
+                   if name in results:
+                      continue
+                   results += f"<b><i>♻️ {name}\n🔗 {msg.link}</i></b>\n\n"                                         
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
