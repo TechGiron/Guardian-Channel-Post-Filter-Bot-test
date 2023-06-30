@@ -99,5 +99,5 @@ async def request(bot, update):
     await bot.send_message(chat_id=admin, text=text, disable_web_page_preview=True)
     await update.answer("✅ Request Sent To Admin", show_alert=True)
     await update.message.delete(60)
-    if bool(results)==False:
+    if bool(text)==False:
         msg = await sts.edit_text(text="Please try searching on Google or provide a similar spelling.", disable_web_page_preview=True)
