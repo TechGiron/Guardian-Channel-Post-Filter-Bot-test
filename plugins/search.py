@@ -24,6 +24,7 @@ async def search(bot, message):
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
     results = ""
+    results = await sts.edit_text(text="")
     try:
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
