@@ -20,10 +20,10 @@ async def search(bot, message):
        return    
     query = message.text.lower()  # Convert the query to lowercase
     sts = await message.reply('Searching...💥')
-    start_time = time.time()  # Start measuring elapsed time
     query_words = query.split()  # Split the query into individual words
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam", "to", "of", "org", "hd", "dub", "pls", "please",]and not re.match(r'^\d+$', word)]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    start_time = time.time()  # Start measuring elapsed time
     results = ""
     try:
        for channel in channels:
