@@ -40,6 +40,7 @@ async def search(bot, message):
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
           msg = await sts.edit_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
+          await msg.reply_text(text="<i>Please try searching on Google or provide a similar spelling.</i>")
        else:
           msg = await sts.edit_text(text=f"Showing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
        _time = (int(time()) + (15*60))
