@@ -31,7 +31,6 @@ async def search(bot, message):
                if name in results:
                   continue 
                results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"        
-       await sts.edit_text(text=head + results)
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
