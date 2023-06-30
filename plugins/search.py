@@ -20,10 +20,10 @@ async def search(bot, message):
        return    
     query = message.text.lower()  # Convert the query to lowercase
     query_words = query.split()  # Split the query into individual words
-    sts = await message.reply('Searching...💥')
-    start_time = time.time()  # Start measuring elapsed time
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam", "to", "of", "org", "hd", "dub", "pls", "please", "2023","2022", "new"]]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
+    sts = await message.reply('Searching...💥')
+    start_time = time.time()  # Start measuring elapsed time
     results = ""
     try:
        for channel in channels:
@@ -32,7 +32,7 @@ async def search(bot, message):
                if name in results:
                   continue 
                results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"  
-       elapsed_time = time.time() - start_time - 1.5  # Calculate elapsed time
+       elapsed_time = time.time() - start_time - 2  # Calculate elapsed time
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
@@ -73,7 +73,7 @@ async def recheck(bot, update):
                if name in results:
                   continue 
                results += f"<b><I>♻️🍿 {name}</I></b>\n\n🔗 {msg.link}</I></b>\n\n"
-       elapsed_time = time.time() - start_time - 1.5  # Calculate elapsed time
+       elapsed_time = time.time() - start_time - 2  # Calculate elapsed time
        if bool(results)==False:          
           return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
        await update.message.edit(text=f"{head}\n\nShowing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
