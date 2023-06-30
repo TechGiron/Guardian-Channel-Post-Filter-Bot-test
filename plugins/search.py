@@ -18,6 +18,7 @@ async def search(bot, message):
     if message.text.startswith("/"):
        return    
     query = message.text.lower()  # Convert the query to lowercase
+    sts = await message.reply('Searching...💥')
     query_words = query.split()  # Split the query into individual words
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam", "to", "of", "org", "hd", "dub", "pls", "please",]and not re.match(r'^\d+$', word)]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
@@ -35,7 +36,7 @@ async def search(bot, message):
           buttons = []
           for movie in movies: 
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
-          msg = await message.reply_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+          msg = await sts.edit_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
        else:
           msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
