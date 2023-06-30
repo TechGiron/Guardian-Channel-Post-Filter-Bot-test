@@ -23,7 +23,7 @@ async def search(bot, message):
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam", "to", "of", "org", "hd", "dub", "pls", "please",]and not re.match(r'^\d+$', word)]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
     head    = "<u>Here is the results 👇\n\nContact To </u> <b><I>@Botz_Guardian_Update</I></b>\n\n"
-    results = await sts.edit_text(text="")
+    results = ""
     try:
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
