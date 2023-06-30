@@ -73,7 +73,7 @@ async def recheck(bot, update):
                name = (msg.text or msg.caption).split("\n")[0]
                if name in results:
                   continue 
-               results += f"<b><I>♻️🍿 {name}</I></b>\n\n🔗 {msg.link}</I></b>\n\n"
+               results += f"<b><I>♻️🍿 {name}\n🔗 {msg.link}</I></b>\n\n"
        elapsed_time = time.time() - start_time - 2  # Calculate elapsed time
        if bool(results)==False:          
           return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
