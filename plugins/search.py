@@ -76,7 +76,7 @@ async def recheck(bot, update):
        elapsed_time = time.time() - start_time - 1.5  # Calculate elapsed time
        if bool(results)==False:          
           return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
-       await update.message.edit(text=head, f"Showing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
+       await update.message.edit(text=f"{head}\n\nShowing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
     except Exception as e:
        await update.message.edit(f"❌ Error: `{e}`")
 
