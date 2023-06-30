@@ -60,6 +60,7 @@ async def recheck(bot, update):
        return await update.answer("That's not for you! 👀", show_alert=True)
 
     m=await update.message.edit("Searching..💥")
+    start_time = time.time()  # Start measuring elapsed time
     id      = update.data.split("_")[-1]
     query   = await search_imdb(id)
     channels = (await get_group(update.message.chat.id))["channels"]
@@ -72,6 +73,7 @@ async def recheck(bot, update):
                if name in results:
                   continue 
                results += f"<b><I>♻️🍿 {name}</I></b>\n\n🔗 {msg.link}</I></b>\n\n"
+       elapsed_time = time.time() - start_time - 1.5  # Calculate elapsed time
        if bool(results)==False:          
           return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
        await update.message.edit(text=head, f"Showing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
