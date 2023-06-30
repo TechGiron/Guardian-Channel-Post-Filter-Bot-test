@@ -23,7 +23,6 @@ async def search(bot, message):
     filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam", "to", "of", "org", "hd", "dub", "pls", "please",]and not re.match(r'^\d+$', word)]
     query = " ".join(filtered_query_words)  # Reconstruct the filtered query
     results = ""
-    results = await sts.edit_text(text="")
     try:
        for channel in channels:
            async for msg in User.search_messages(chat_id=channel, query=query):
@@ -39,7 +38,7 @@ async def search(bot, message):
           msg = await sts.edit_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
        else:
-          msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
+          msg = await sts.edit_text(text=results, disable_web_page_preview=True)
        _time = (int(time()) + (15*60))
        await save_dlt_message(msg, _time)
     except:
