@@ -74,6 +74,9 @@ async def recheck(bot, update):
                   continue 
                results += f"<b><I>♻️🍿 {name}\n🔗 {msg.link}</I></b>\n\n"
        elapsed_time = time.time() - start_time - 2  # Calculate elapsed time
+       if elapsed_time >= 10:  # Check if the elapsed time is greater than or equal to 10 seconds
+          await sts.edit_text("Please search on Google or check your spelling.")
+          return
        if bool(results)==False:          
           return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
        await update.message.edit(text=f"{head}\n\nShowing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
