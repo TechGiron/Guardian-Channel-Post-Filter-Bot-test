@@ -8,7 +8,7 @@ from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 import re
 import time
 
-@Client.on_message(filters.text & filters.group & ~filters.me & filters.incoming & ~filters.command(["verify", "connect", "id"]))
+@Client.on_message(filters.text & filters.group & filters.user & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
     f_sub = await force_sub(bot, message)
     if f_sub==False:
