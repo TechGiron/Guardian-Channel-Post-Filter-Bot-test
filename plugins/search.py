@@ -49,7 +49,7 @@ async def search(bot, message):
        
 
 
-@Client.on_callback_query(filters.regex(r"^recheck"))
+@Client.on_callback_query(filters.regex(r"^recheck") & filters.group)
 async def recheck(bot, update):
     clicked = update.from_user.id
     try:      
@@ -81,7 +81,7 @@ async def recheck(bot, update):
        await update.message.edit(f"❌ Error: `{e}`")
 
 
-@Client.on_callback_query(filters.regex(r"^request"))
+@Client.on_callback_query(filters.regex(r"^request") & filters.group)
 async def request(bot, update):
     clicked = update.from_user.id
     try:      
@@ -139,7 +139,7 @@ async def search(bot, message):
     except:
        pass
 
-@Client.on_callback_query(filters.regex(r"^recheck"))
+@Client.on_callback_query(filters.regex(r"^recheck") & filters.private)
 async def recheck(bot, update):
     clicked = update.from_user.id
     try:      
@@ -170,7 +170,7 @@ async def recheck(bot, update):
     except Exception as e:
        await update.message.edit(f"❌ Error: `{e}`")
 
-@Client.on_callback_query(filters.regex(r"^request"))
+@Client.on_callback_query(filters.regex(r"^request") & filters.private)
 async def request(bot, update):
     clicked = update.from_user.id
     try:      
