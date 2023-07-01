@@ -7,11 +7,12 @@ from pyrogram.errors import UserNotParticipant
 from motor.motor_asyncio import AsyncIOMotorClient
 from pyrogram.types import ChatPermissions, InlineKeyboardMarkup, InlineKeyboardButton
 
-dbclient = AsyncIOMotorClient(DATABASE_URI)
-db       = dbclient["Channel-Filter"]
-grp_col  = db["GROUPS"]
-user_col = db["USERS"]
-dlt_col  = db["Auto-Delete"]
+dbclient    = AsyncIOMotorClient(DATABASE_URI)
+db          = dbclient["Channel-Filter"]
+grp_col     = db["GROUPS"]
+user_col    = db["USERS"]
+dlt_col     = db["Auto-Delete"]
+private_col = db["GROUPS"]
 
 ia = Cinemagoer()
 
@@ -145,3 +146,40 @@ async def broadcast_messages(user_id, message):
         return False, "Error"
     except Exception as e:
         return False, "Error"
+
+async def add_private(user_id, user_name, channels, f_sub, verified):
+    data = {
+        "_id": user_id,
+        "user_name": user_name,
+        "channels": channels,
+        "f_sub": f_sub,
+        "verified": verified
+    }
+    try:
+        await private_col.insert_one(data)
+    except DuplicateKeyError:
+        pass
+
+async def get_private(id):
+    data = {'user_id': id}
+    private = await private_col.find_one(data)
+    return dict(private)
+
+async def update_private(id, new_data):
+    data = {"_id": id}
+    new_value = {"$set": new_data}
+    await private_col.update_one(data, new_value)
+
+async def delete_private(id):
+    data = {"_id": id}
+    await private_col.delete_one(data)
+
+async def delete_user(id):
+    data = {"user_id": id}
+    await private_col.delete_one(data)
+
+async def get_privates():
+    count = await private_col.count_documents({})
+    cursor = private_col.find({})
+    result = await cursor.to_list(length=int(count))
+    return count, result
