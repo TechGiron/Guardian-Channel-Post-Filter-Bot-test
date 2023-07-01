@@ -47,8 +47,6 @@ async def search(bot, message):
     except:
        pass
 
-
-@Client.on_callback_query(filters.regex(r"^recheck"))
 async def recheck(bot, update):
     clicked = update.from_user.id
     try:      
@@ -62,7 +60,7 @@ async def recheck(bot, update):
     start_time = time.time()  # Start measuring elapsed time
     id      = update.data.split("_")[-1]
     query   = await search_imdb(id)
-    channels = (await get_group(update.message.chat.id))["channels"]
+    channels = (await get_private(update.message.from_user.id))["channels"]
     head    = "<u>I Have Searched Movie With Wrong Spelling But Take care next time"
     results = ""
     try:
@@ -79,8 +77,6 @@ async def recheck(bot, update):
     except Exception as e:
        await update.message.edit(f"❌ Error: `{e}`")
 
-
-@Client.on_callback_query(filters.regex(r"^request"))
 async def request(bot, update):
     clicked = update.from_user.id
     try:      
@@ -90,7 +86,7 @@ async def request(bot, update):
     if clicked != typed:
        return await update.answer("That's not for you! 👀", show_alert=True)
 
-    admin = (await get_group(update.message.chat.id))["user_id"]
+    admin = (await get_private(update.message.from_user.id))["user_id"]
     id    = update.data.split("_")[1]
     name  = await search_imdb(id)
     url   = "https://www.imdb.com/title/tt"+id
