@@ -25,12 +25,9 @@ async def add_group(group_id, group_name, user_name, user_id, channels, f_sub, v
        pass
 
 async def get_group(id):
-    data = {'_id': id}
+    data = {'_id':id}
     group = await grp_col.find_one(data)
-    if group:
-        return dict(group)
-    else:
-        return None
+    return dict(group)
 
 async def update_group(id, new_data):
     data = {"_id":id}
@@ -59,13 +56,10 @@ async def add_user(id, name):
        pass
 
 async def get_users():
-    count = await user_col.count_documents({})
-    if count > 0:
-        cursor = user_col.find({})
-        list = await cursor.to_list(length=int(count))
-        return count, list
-    else:
-        return 0, None
+    count  = await user_col.count_documents({})
+    cursor = user_col.find({})
+    list   = await cursor.to_list(length=int(count))
+    return count, list
 
 async def save_dlt_message(chat_id, msg, time):
     data = {"chat_id": chat_id,
