@@ -1,1 +1,1 @@
-worker: python3 main.py
+worker: /app/.heroku/python/bin/pip install -r requirements.txt
