@@ -1,5 +1,5 @@
-API_ID       = 20594809
-API_HASH     = "356e93ef374cb3e6cef7befeb92b815e"
+API_ID       = 20845496
+API_HASH     = "5cbba7c97fe4bc32c5763f059d54917d"
 BOT_TOKEN    = "5813956283:AAEbzFBRDHkOwCDRWW_d3zWZOqGGzbLCYuY"
 SESSION      = "BQE6QHkAPrbuwJGVofwMhnHwzx71jCms5iBxlO2P7VqRIeADnsLvC57Hs7xuw8g0DGmXylQdpCu1mA6tgQIx-DUm7eml1yKj3jMBu08_zHO1nokJsDivQu2hwD4sDx1NlgtLgO-WOUHGDcpdogPH_VIdPO_B3ugKP6b80jXTiOM9usc-cCCWT0qkDGS1CKqEXsHJWz2eDHPLqTSk9ZdRCRtixr5XNTU1LdsPLBoUzV9jcY6eKu9k4FwHW8pBXKaHY0QEkSo1yq8CdF5u6O8-hB18P8zImsrA-OD61VchzY-nBTB5AOE1tXF2Gm4CG0uPtl9J8BYA0LOa83awk_epiXej3R9UMwAAAAFPGrZbAA"
 DATABASE_URI = "mongodb+srv://Guardian:f30bkPuWwnacKKuc@cluster0.lnqaahf.mongodb.net/?retryWrites=true&w=majority"
