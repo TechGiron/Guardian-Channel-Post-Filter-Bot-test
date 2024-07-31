@@ -2,6 +2,6 @@ API_ID       = 20845496
 API_HASH     = "5cbba7c97fe4bc32c5763f059d54917d"
 BOT_TOKEN    = "5813956283:AAEbzFBRDHkOwCDRWW_d3zWZOqGGzbLCYuY"
 SESSION      = "BQE-E7gAAQOT3TaIhk2l8KL03VfSBPCmwADf1Mx0GYYyI5iC6HZyrWUUz69Bji_QiOJUrwtCY-L78uYH0guHhlSprUZwPZRtbv_--8EWFdp3jnLT6ZkZz8hfoFGUaZuNMTWxtEQ7yqixjth78Ayc2FycGtaltepnWn7WOoC2mpggvvATLBntJks2T0MzK1ZAxq5E4HA4wN8pML8JnhkJngGjUQ_AZdy9u_9CoYjw0obV3ThOwLxSemZu8im_JYdZul3k4D0suN37CXI_m5y09dF1i9kNgCu3kOJa951M5g_nQzQ2e8u4_ZIISkVB-Stx1slU66hSjhqe5XW21bfc619HmW7drQAAAAFaie67AQ"
-DATABASE_URI = "mongodb+srv://Guardian:f30bkPuWwnacKKuc@cluster0.lnqaahf.mongodb.net/?retryWrites=true&w=majority"
+DATABASE_URI = "mongodb+srv://Guardian:03khd5TFckybkqKD@cluster0.lnqaahf.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 LOG_CHANNEL  = -1002231340475
 ADMIN        = 5503019033
