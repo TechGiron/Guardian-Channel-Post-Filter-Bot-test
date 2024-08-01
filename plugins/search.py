@@ -5,8 +5,6 @@ from time import time
 from client import User
 from pyrogram import Client, filters 
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton 
-import re
-import time
 
 @Client.on_message(filters.text & filters.group & filters.incoming & ~filters.command(["verify", "connect", "id"]))
 async def search(bot, message):
@@ -18,12 +16,8 @@ async def search(bot, message):
        return     
     if message.text.startswith("/"):
        return    
-    query = message.text.lower()  # Convert the query to lowercase
-    query_words = query.split()  # Split the query into individual words
-    filtered_query_words = [word for word in query_words if word not in ["the", "dubbed", "movie", "download", "movies", "hindi", "english", "punjabi", "marathi", "tamil", "gujarati", "bengali", "kannada", "telugu", "malayalam", "to", "of", "org", "hd", "dub", "pls", "please", "2023","2022", "new"]]
-    query = " ".join(filtered_query_words)  # Reconstruct the filtered query
-    sts = await message.reply('Searching...💥')
-    start_time = time.time()  # Start measuring elapsed time
+    query   = message.text 
+    head    = "<u>Here is the results 👇\n\nPowered By </u> <b><I>@CyniteBackup</I></b>\n\n"
     results = ""
     try:
        for channel in channels:
@@ -31,17 +25,17 @@ async def search(bot, message):
                name = (msg.text or msg.caption).split("\n")[0]
                if name in results:
                   continue 
-               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"  
-       elapsed_time = time.time() - start_time - 2  # Calculate elapsed time
+               results += f"<b><I>♻️ {name}\n🔗 {msg.link}</I></b>\n\n"                                                      
        if bool(results)==False:
           movies = await search_imdb(query)
           buttons = []
           for movie in movies: 
               buttons.append([InlineKeyboardButton(movie['title'], callback_data=f"recheck_{movie['id']}")])
-          msg = await sts.edit_text(text="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
+          msg = await message.reply_photo(photo="https://telegra.ph/file/cf6706158b0bfaf436f54.jpg",
+                                          caption="<b><I>I Couldn't find anything related to Your Query😕.\nDid you mean any of these?</I></b>", 
                                           reply_markup=InlineKeyboardMarkup(buttons))
        else:
-          msg = await sts.edit_text(text=f"Showing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
+          msg = await message.reply_text(text=head+results, disable_web_page_preview=True)
        _time = (int(time()) + (15*60))
        await save_dlt_message(msg, _time)
     except:
@@ -60,11 +54,10 @@ async def recheck(bot, update):
        return await update.answer("That's not for you! 👀", show_alert=True)
 
     m=await update.message.edit("Searching..💥")
-    start_time = time.time()  # Start measuring elapsed time
     id      = update.data.split("_")[-1]
     query   = await search_imdb(id)
     channels = (await get_group(update.message.chat.id))["channels"]
-    head    = "<u>I Have Searched Movie With Wrong Spelling But Take care next time"
+    head    = "<u>I Have Searched Movie With Wrong Spelling But Take care next time 👇\n\nPowered By </u> <b><I>@CyniteBackup</I></b>\n\n"
     results = ""
     try:
        for channel in channels:
@@ -72,11 +65,10 @@ async def recheck(bot, update):
                name = (msg.text or msg.caption).split("\n")[0]
                if name in results:
                   continue 
-               results += f"<b><I>♻️🍿 {name}\n🔗 {msg.link}</I></b>\n\n"
-       elapsed_time = time.time() - start_time - 2  # Calculate elapsed time
+               results += f"<b><I>♻️🍿 {name}</I></b>\n\n🔗 {msg.link}</I></b>\n\n"
        if bool(results)==False:          
           return await update.message.edit("Still no results found! Please Request To Group Admin", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🎯 Request To Admin 🎯", callback_data=f"request_{id}")]]))
-       await update.message.edit(text=f"{head}\n\nShowing results in {elapsed_time:.2f} sec\n\n{results}", disable_web_page_preview=True)
+       await update.message.edit(text=head+results, disable_web_page_preview=True)
     except Exception as e:
        await update.message.edit(f"❌ Error: `{e}`")
 
