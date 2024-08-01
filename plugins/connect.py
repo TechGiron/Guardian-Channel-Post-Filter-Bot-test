@@ -31,7 +31,7 @@ async def connect(bot, message):
        group  = await bot.get_chat(message.chat.id)
        c_link = chat.invite_link
        g_link = group.invite_link
-       await bot.send_message(channel, "Bot successfully connected!")
+       await User.join_chat(c_link)
     except Exception as e:
        if "The user is already a participant" in str(e):
           pass
@@ -71,7 +71,7 @@ async def disconnect(bot, message):
        group  = await bot.get_chat(message.chat.id)
        c_link = chat.invite_link
        g_link = group.invite_link
-       await bot.send_message(channel, "Bot successfully disconnected!")
+       await User.leave_chat(channel)
     except Exception as e:
        text = f"❌ Error: `{str(e)}`\nMake sure I'm admin in that channel & this group with all permissions and {(user.username or user.mention)} is not banned there"
        return await m.edit(text)
