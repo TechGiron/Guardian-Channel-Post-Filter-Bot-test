@@ -8,3 +8,4 @@ asyncio
 psutil
 Flask==2.2.2
 gunicorn==20.1.0
+werkzeug==2.2.2
