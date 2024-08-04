@@ -1,3 +1,6 @@
+import os
+from os import environ
+
 API_ID       = 20845496
 API_HASH     = "5cbba7c97fe4bc32c5763f059d54917d"
 BOT_TOKEN    = "7373892111:AAHx3uHTwUhou29gZreEpd_HNgRzk06k1bU"
