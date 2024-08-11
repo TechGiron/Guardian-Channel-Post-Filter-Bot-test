@@ -89,16 +89,16 @@ async def connections(bot, message):
     channels  = group["channels"]
     f_sub     = group["f_sub"]
     if message.from_user.id!=user_id:
-       return await message.reply(f"<b>Only {user_name} can use this command</b> 😁")
+       return await message.reply(f"Only {user_name} can use this command 😁")
     if bool(channels)==False:
-       return await message.reply("<b>This group is currently not connected to any channels!\nConnect one using /connect</b>")
+       return await message.reply("This group is currently not connected to any channels!\nConnect one using /connect")
     text = "This Group is currently connected to:\n\n"
     for channel in channels:
         try:
            chat = await bot.get_chat(channel)
            name = chat.title
            link = chat.invite_link
-           text += f"🔗<b>Connected Channel - [{name}]({link})</b>\n"
+           text += f"🔗Connected Channel - [{name}]({link})\n"
         except Exception as e:
            await message.reply(f"❌ Error in `{channel}:`\n`{e}`")
     if bool(f_sub):
@@ -108,6 +108,6 @@ async def connections(bot, message):
           f_link  = f_chat.invite_link
           text += f"\nFSub: [{f_title}]({f_link})"
        except Exception as e:
-          await message.reply(f"❌ <b>Error in FSub</b> (`{f_sub}`)\n`{e}`")
-   
+          await message.reply(f"❌ Error in FSub (`{f_sub}`)\n`{e}`")
+
     await message.reply(text=text, disable_web_page_preview=True)
