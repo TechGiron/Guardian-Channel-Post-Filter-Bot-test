@@ -5,4 +5,5 @@ cinemagoer
 aiohttp
 aiofiles
 asyncio
-Flask==2.0.3
+psutil
+Flask==2.2.2
